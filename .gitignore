@@ -1,0 +1,12 @@
+# venv
+.venv
+__pycache__
+
+# log
+logs
+
+# data
+data
+
+# service_account.json
+service_account.json

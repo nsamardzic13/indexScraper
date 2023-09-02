@@ -1,0 +1,32 @@
+{
+    "categories": {
+        "cars": {
+            "stgTable": "staging.cars"
+        },
+        "apartments": {
+            "stgTable": "staging.apartments"
+        },
+        "houses": {
+            "stgTable": "staging.houses"
+        }
+    },
+    "dropColumns": [
+        "_corrupt_record"
+    ],
+    "nonNullColumns": [
+        "Cijena",
+        "ID"
+    ],
+    "bucketName": "indexads-bucket",
+    "columnType": {
+        "int": [
+            "ID", "Broj_Prikaza", "Godina proizvodnje", "Godina modela", "Broj stupnjeva na mjenjaču", "Broj vrata"
+        ], 
+        "float": [
+            "Cijena", "Prijeđeni kilometri", "Snaga motora kW"
+        ],
+        "datetime": [
+            "Objavljeno"
+        ]
+    }
+}
