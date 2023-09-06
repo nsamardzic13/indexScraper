@@ -1,25 +1,15 @@
 import os
 from datetime import datetime, timedelta
 
-from src.helper import DataFrameHelper, GCPHelper
-from src.helper import config, logger
-
-
-def create_dir_if_not_exists(path: str) -> None:
-    if not os.path.exists(path):
-        os.mkdir(path)
+from src.helper import DataFrameHelper, GCPHelper, config, logger
 
 # global variables
 key_path = 'service_account.json'
 today = datetime.now().strftime('%Y%m%d')
 
 DATA_FOLDER = 'data/'
-create_dir_if_not_exists(DATA_FOLDER)
-
 QUERY_FOLDER = 'queries/'
-
 LOGS_FOLDER = 'logs/'
-create_dir_if_not_exists(DATA_FOLDER)
 
 # class istances
 dfh = DataFrameHelper()

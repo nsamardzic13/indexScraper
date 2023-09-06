@@ -13,6 +13,9 @@ WORKDIR=$(dirname $(pwd))
 DATADIR="${WORKDIR}/data"
 LOGDIR="${WORKDIR}/logs"
 
+mkdir -p $DATADIR
+mkdir -p $LOGDIR
+
 # list of PIDs
 PIDS=()
 
