@@ -62,6 +62,10 @@ WHEN MATCHED AND target.cijena != source.cijena THEN
   UPDATE SET
     target.valid_to = DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY), -- Set previous record's valid_to date
     target.is_current = false -- Set previous record as not current
-WHEN NOT MATCHED THEN
+WHEN NOT MATCHED BY SOURCE THEN 
+  UPDATE SET
+    target.valid_to = DATE_ADD(CURRENT_DATE(), INTERVAL -1 DAY), -- Set previous record's valid_to date
+    target.is_current = false -- Set previous record as not current
+WHEN NOT MATCHED BY TARGET THEN
   INSERT (id, cijena, valid_from, valid_to, is_current)
   VALUES (source.id, source.cijena, CURRENT_DATE(), DATE '9999-12-31', true);
