@@ -5,6 +5,9 @@
 # fail on err
 set -eo pipefail
 
+NOW=$(date)
+echo "Script started @ ${NOW}"
+
 source ../.venv/bin/activate
 
 EPOCH=$(date +%s)
@@ -43,3 +46,6 @@ echo "Crawling completed"
 cd ..
 
 python transform_load.py
+
+NOW=$(date)
+echo "Script ended @ ${NOW}"
