@@ -17,7 +17,7 @@
         "Cijena",
         "ID"
     ],
-    "bucketName": "indexads-bucket",
+    "bucketName": "tf-indexads-bucket",
     "columnType": {
         "int": [
             "ID", "Broj_Prikaza", "Godina proizvodnje", "Godina modela", "Broj stupnjeva na mjenjaču", "Broj vrata"

@@ -10,11 +10,11 @@ class BaseSpyder(scrapy.Spider):
         'CONCURRENT_REQUESTS_PER_DOMAIN': 500,
         'CONCURRENT_REQUESTS_PER_IP': 500,
         'LOG_LEVEL': 'INFO',
-        'COOKIES_ENABLED': False
+        'COOKIES_ENABLED': False,
+        'FEED_FORMAT': 'json'
     }
 
     def parse(self, response):
-        class_executor_name = type(self).__name__
         if self.mode == 'partial':
             try:
                 publish_date = response.css('li.icon-time::text').get()
@@ -24,7 +24,7 @@ class BaseSpyder(scrapy.Spider):
                         '%d.%m.%Y.'
                     )
                     self.logger.info(f'Fetched first data on the page is {publish_date}')
-                    n_days_ago = datetime.now() - timedelta(days=8)
+                    n_days_ago = datetime.now() - timedelta(days=7)
 
                     if publish_date <= n_days_ago:
                         self.logger.info(f'Skipping url: {response.url}')
@@ -35,7 +35,7 @@ class BaseSpyder(scrapy.Spider):
        
         self.logger.info(f'Fetching url: {response.url}')
         hrefs = response.css('a.result::attr(href)').getall()
-        if class_executor_name == 'CarSpyder':
+        if self.name == 'cars':
             zupanije = response.css('li.icon-marker::text').getall()
             for href, zupanija in zip(hrefs, zupanije):
                 yield response.follow(href, self.parse_content, cb_kwargs={"zupanija": zupanija})
