@@ -1,6 +1,6 @@
 resource "aws_sfn_state_machine" "tf_indexads_sfn" {
   name     = "tf-indexads-sfn"
-  role_arn = aws_iam_role.tf_ecs_task_role.arn
+  role_arn = aws_iam_role.tf_indexads_role.arn
 
   definition = <<EOF
 {
@@ -9,7 +9,6 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
   "States": {
     "Parallel Scrape": {
       "Type": "Parallel",
-      "End": true,
       "Branches": [
         {
           "StartAt": "ECS RunTask Cars",
@@ -113,7 +112,16 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
             }
           }
         }
-      ]
+      ],
+      "Next": "StartCrawler"
+    },
+    "StartCrawler": {
+      "Type": "Task",
+      "End": true,
+      "Parameters": {
+        "Name": "${aws_glue_crawler.tf_indexads_crawler.name}"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler.waitForTaskToken"
     }
   }
 }
