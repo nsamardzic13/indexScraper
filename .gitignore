@@ -15,4 +15,4 @@ service_account.json
 azure_config.json
 
 # terraform 
-infrastructure/.terraform
+*terraform*
