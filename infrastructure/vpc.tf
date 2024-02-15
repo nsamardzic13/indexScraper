@@ -17,13 +17,6 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 }
 
-resource "aws_subnet" "private_subnet" {
-  count               = 2
-  vpc_id              = aws_vpc.tf_vpc.id
-  cidr_block          = "10.0.${count.index + 3}.0/24"
-  availability_zone   = element(var.availability_zones, count.index)
-}
-
 resource "aws_internet_gateway" "tf_igw" {
   vpc_id = aws_vpc.tf_vpc.id
 }
@@ -37,18 +30,11 @@ resource "aws_route_table" "tf_public_route_table" {
   }
 }
 
-resource "aws_route_table_association" "tf_public_subnet_association" {
-  count = 2
-
-  subnet_id      = aws_subnet.public_subnet[count.index].id
-  route_table_id = aws_route_table.tf_public_route_table.id
-}
-
 resource "aws_security_group" "tf_ecs_security_group" {
   name        = "tf-ecs-security-group"
   description = "Security group for ECS instances"
   vpc_id      = aws_vpc.tf_vpc.id
-
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -64,33 +50,9 @@ resource "aws_security_group" "tf_ecs_security_group" {
   }
 }
 
-resource "aws_nat_gateway" "tf_nat_gateway" {
+resource "aws_route_table_association" "tf_public_subnet_association" {
   count = 2
 
-  allocation_id = aws_eip.tf_eip[count.index].id
-  subnet_id     = aws_subnet.public_subnet[count.index].id
-}
-
-resource "aws_eip" "tf_eip" {
-  count = 2
-}
-
-resource "aws_route_table" "tf_private_route_table" {
-  count = 2
-  vpc_id = aws_vpc.tf_vpc.id
-}
-
-resource "aws_route" "tf_nat_gateway_route" {
-  count = 2
-
-  route_table_id         = aws_route_table.tf_private_route_table[count.index].id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.tf_nat_gateway[count.index].id
-}
-
-resource "aws_route_table_association" "tf_private_subnet_association" {
-  count = 2
-
-  subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.tf_private_route_table[count.index].id
+  subnet_id      = aws_subnet.public_subnet[count.index].id
+  route_table_id = aws_route_table.tf_public_route_table.id
 }

@@ -22,8 +22,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 "TaskDefinition": "${aws_ecs_task_definition.tf_indexads_task.arn}",
                 "NetworkConfiguration": {
                   "AwsvpcConfiguration": {
-                    "Subnets": ${jsonencode(aws_subnet.private_subnet[*].id)},
-                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"]
+                    "Subnets": ${jsonencode(aws_subnet.public_subnet[*].id)},
+                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"],
+                    "AssignPublicIp": "ENABLED"
                   }
                 },
                 "Overrides": {
@@ -56,8 +57,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 "TaskDefinition": "${aws_ecs_task_definition.tf_indexads_task.arn}",
                 "NetworkConfiguration": {
                   "AwsvpcConfiguration": {
-                    "Subnets": ${jsonencode(aws_subnet.private_subnet[*].id)},
-                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"]
+                    "Subnets": ${jsonencode(aws_subnet.public_subnet[*].id)},
+                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"],
+                    "AssignPublicIp": "ENABLED"
                   }
                 },
                 "Overrides": {
@@ -90,8 +92,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 "TaskDefinition": "${aws_ecs_task_definition.tf_indexads_task.arn}",
                 "NetworkConfiguration": {
                   "AwsvpcConfiguration": {
-                    "Subnets": ${jsonencode(aws_subnet.private_subnet[*].id)},
-                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"]
+                    "Subnets": ${jsonencode(aws_subnet.public_subnet[*].id)},
+                    "SecurityGroups": ["${aws_security_group.tf_ecs_security_group.id}"],
+                    "AssignPublicIp": "ENABLED"
                   }
                 },
                 "Overrides": {
@@ -117,11 +120,39 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
     },
     "StartCrawler": {
       "Type": "Task",
-      "End": true,
       "Parameters": {
         "Name": "${aws_glue_crawler.tf_indexads_crawler.name}"
       },
-      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler.waitForTaskToken"
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Next": "Is It Running"
+    },
+    "Is It Running": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Or": [
+            {
+              "Variable": "$.response.get_crawler.Crawler.State",
+              "StringEquals": "RUNNING"
+            },
+            {
+              "Variable": "$.response.get_crawler.Crawler.State",
+              "StringEquals": "STOPPING"
+            }
+          ],
+          "Next": "Wait For Crawler"
+        }
+      ],
+      "Default": "End If Done"
+    },
+    "Wait For Crawler": {
+      "Type": "Wait",
+      "Seconds": 20,
+      "Next": "StartCrawler"
+    },
+    "End If Done": {
+      "Type": "Pass",
+      "End": true
     }
   }
 }

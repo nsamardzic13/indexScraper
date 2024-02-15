@@ -17,7 +17,7 @@ with open('config.json', 'r', encoding='utf-8') as f:
 # json to parquet
 def json_to_parquet(data_filename: str) -> str:
     df = pd.read_json(data_filename)
-    
+
     # Convert DataFrame to Arrow Table
     table = pa.Table.from_pandas(df)
 
@@ -37,7 +37,13 @@ def crawl_spider(spider_cls, mode, name, data_filename):
     process.start()
 
     parquet_filename = json_to_parquet(data_filename)
-    object_name = f'{name}/{os.path.basename(parquet_filename)}'
+    # Extract year, month, and day from the current date
+    today = datetime.today()
+    year = today.strftime('%Y')
+    month = today.strftime('%m')
+    day = today.strftime('%d')
+
+    object_name = f'{name}/year={year}/month={month}/day={day}/mode={mode}/{os.path.basename(parquet_filename)}'
     # upload file
     s3_client = boto3.client('s3')
     try:
