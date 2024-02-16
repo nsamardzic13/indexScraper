@@ -66,9 +66,7 @@ def main():
     NAME = os.environ.get('NAME', default='apartments')
 
     week_of_year = datetime.today().isocalendar()[1]
-    # MODE = 'full' if week_of_year % 4 == 0 else 'partial'
-    # MODE = 'full'
-    MODE = 'partial'
+    MODE = 'full' if week_of_year % 4 == 0 else 'partial'
 
     TODAY = datetime.today().strftime('%Y-%m-%d')
 
