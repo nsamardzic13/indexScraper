@@ -5,15 +5,15 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
   definition = <<EOF
 {
   "Comment": "A description of my state machine",
-  "StartAt": "Parallel Scrape",
+  "StartAt": "ParallelScrape",
   "States": {
-    "Parallel Scrape": {
+    "ParallelScrape": {
       "Type": "Parallel",
       "Branches": [
         {
-          "StartAt": "ECS RunTask Cars",
+          "StartAt": "ECSRunTaskCars",
           "States": {
-            "ECS RunTask Cars": {
+            "ECSRunTaskCars": {
               "Type": "Task",
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters": {
@@ -46,9 +46,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
           }
         },
         {
-          "StartAt": "ECS RunTask Apartments",
+          "StartAt": "ECSRunTaskApartments",
           "States": {
-            "ECS RunTask Apartments": {
+            "ECSRunTaskApartments": {
               "Type": "Task",
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters": {
@@ -81,9 +81,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
           }
         },
         {
-          "StartAt": "ECS RunTask Houses",
+          "StartAt": "ECSRunTaskHouses",
           "States": {
-            "ECS RunTask Houses": {
+            "ECSRunTaskHouses": {
               "Type": "Task",
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters": {
@@ -124,33 +124,41 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
         "Name": "${aws_glue_crawler.tf_indexads_crawler.name}"
       },
       "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
-      "Next": "Is It Running"
+      "Next": "GetCrawler"
     },
-    "Is It Running": {
+    "GetCrawler": {
+      "Type": "Task",
+      "Next": "IsItRunning",
+      "Parameters": {
+        "Name": "${aws_glue_crawler.tf_indexads_crawler.name}"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:glue:getCrawler"
+    },
+    "IsItRunning": {
       "Type": "Choice",
       "Choices": [
         {
           "Or": [
             {
-              "Variable": "$.response.get_crawler.Crawler.State",
+              "Variable": "$.Crawler.State",
               "StringEquals": "RUNNING"
             },
             {
-              "Variable": "$.response.get_crawler.Crawler.State",
+              "Variable": "$.Crawler.State",
               "StringEquals": "STOPPING"
             }
           ],
-          "Next": "Wait For Crawler"
+          "Next": "WaitForCrawler"
         }
       ],
-      "Default": "End If Done"
+      "Default": "EndIfDone"
     },
-    "Wait For Crawler": {
+    "WaitForCrawler": {
       "Type": "Wait",
       "Seconds": 20,
-      "Next": "StartCrawler"
+      "Next": "GetCrawler"
     },
-    "End If Done": {
+    "EndIfDone": {
       "Type": "Pass",
       "End": true
     }
