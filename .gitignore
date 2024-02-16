@@ -8,9 +8,6 @@ logs
 # data
 data
 
-# service_account.json
-service_account.json
-
 # azure data
 azure_config.json
 
