@@ -12,7 +12,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project = "tf-IndexAds"
+      Project = "tf-${var.project_name}"
     }
   }
 }
