@@ -1,5 +1,5 @@
 resource "aws_sfn_state_machine" "tf_indexads_sfn" {
-  name     = "tf-${var.project_name}-sfn"
+  name     = "${var.project_name}-sfn"
   role_arn = aws_iam_role.tf_indexads_role.arn
 
   definition = <<EOF

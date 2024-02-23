@@ -1,9 +1,9 @@
 resource "aws_ecs_cluster" "tf_indexads_ecs" {
-  name = "tf-${var.project_name}-ecs"
+  name = "${var.project_name}-ecs"
 }
 
 resource "aws_ecs_task_definition" "tf_indexads_task" {
-  family = "tf-${var.project_name}"
+  family = var.project_name
   network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu = 256
@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "tf_indexads_task" {
   task_role_arn = aws_iam_role.tf_indexads_role.arn
   container_definitions = jsonencode([
     {
-      name = "tf-${var.project_name}-task"
+      name = "${var.project_name}-task"
       image = "docker.io/nidjo13/${var.project_name}:latest"
       essential = true
       logConfiguration = {
@@ -28,5 +28,5 @@ resource "aws_ecs_task_definition" "tf_indexads_task" {
 }
 
 resource "aws_cloudwatch_log_group" "tf_ecs_indexads_logs" {
-  name = "tf-ecs-${var.project_name}-logs"
+  name = "${var.project_name}-ecs-logs"
 }
