@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "tf_indexads_task" {
   container_definitions = jsonencode([
     {
       name = "${var.project_name}-task"
-      image = "docker.io/nidjo13/${var.project_name}:latest"
+      image = "docker.io/nidjo13/indexads:latest"
       essential = true
       logConfiguration = {
           logDriver = "awslogs"

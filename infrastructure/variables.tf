@@ -3,3 +3,8 @@ variable "project_name" {
   type = string
   default = "tf-indexads"
 }
+
+variable "sns_email_address" {
+  type = string
+  default = "nikola.samardzic1997@gmail.com"
+}
