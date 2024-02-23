@@ -27,7 +27,15 @@ resource "aws_iam_role" "tf_indexads_role" {
         Principal = {
           Service  = "glue.amazonaws.com" 
         }
-      }
+      },
+      # scheduler
+      {
+            "Effect" = "Allow",
+            "Principal" = {
+                "Service" = "scheduler.amazonaws.com"
+            },
+            "Action" = "sts:AssumeRole"
+        }
     ]
   })
 }
@@ -65,4 +73,9 @@ resource "aws_iam_role_policy_attachment" "AmazonECS_FullAccess" {
 resource "aws_iam_role_policy_attachment" "AWSGlueServiceRole" {
   role       = aws_iam_role.tf_indexads_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEventBridgeSchedulerFullAccess" {
+  role       = aws_iam_role.tf_indexads_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess"
 }
