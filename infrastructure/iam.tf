@@ -1,5 +1,5 @@
 resource "aws_iam_role" "tf_indexads_role" {
-  name = "tf-indexads-role"
+  name = "${var.project_name}-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

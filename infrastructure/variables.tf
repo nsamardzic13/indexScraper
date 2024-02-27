@@ -6,5 +6,5 @@ variable "project_name" {
 
 variable "sns_email_address" {
   type = string
-  default = "nikola.samardzic1997@gmail.com"
+  default = "nikola.samardzic1997+AWS@gmail.com"
 }

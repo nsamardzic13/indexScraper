@@ -26,3 +26,23 @@ resource "aws_cloudwatch_event_target" "tf_indexads_sns_target_sfn" {
   rule      = aws_cloudwatch_event_rule.tf_cw_event_rule_sfn.name
   arn       = aws_sns_topic.tf_indexads_sns_sfn.arn
 }
+
+
+resource "aws_sns_topic_policy" "default" {
+  arn    = aws_sns_topic.tf_indexads_sns_sfn.arn
+  policy = data.aws_iam_policy_document.sns_topic_policy.json
+}
+
+data "aws_iam_policy_document" "sns_topic_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["SNS:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.tf_indexads_sns_sfn.arn]
+  }
+}
