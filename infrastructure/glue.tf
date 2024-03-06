@@ -7,6 +7,15 @@ resource "aws_glue_crawler" "tf_indexads_crawler" {
   name          = "${var.project_name}-crawler"
   role          = aws_iam_role.tf_indexads_role.arn
 
+  configuration = jsonencode(
+    {
+      CrawlerOutput = {
+        Partitions = { AddOrUpdateBehavior = "InheritFromTable" }
+      }
+      Version = 1
+    }
+  )
+
   s3_target {
     path = "s3://${aws_s3_bucket.tf_indexads_bucket.bucket}"
   }
