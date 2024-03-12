@@ -10,7 +10,7 @@ resource "aws_glue_crawler" "tf_indexads_crawler" {
   schema_change_policy {
     delete_behavior = "DELETE_FROM_DATABASE"
   }
-  
+
   configuration = jsonencode(
     {
       CrawlerOutput = {
