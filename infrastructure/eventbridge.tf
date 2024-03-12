@@ -6,7 +6,7 @@ resource "aws_scheduler_schedule" "example" {
     mode = "OFF"
   }
 
-  schedule_expression = "cron(00 06 ? * MON *)"
+  schedule_expression = "cron(00 07 ? * MON *)"
 
   target {
     arn      = aws_sfn_state_machine.tf_indexads_sfn.arn
