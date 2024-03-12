@@ -3,10 +3,10 @@ resource "aws_cloudwatch_event_rule" "tf_cw_event_rule_sfn" {
   description = "Trigger on Step function changes"
   event_pattern = jsonencode({
     source      = ["aws.states"],
-    detail-type = ["Step Functions Execution State Change"],
+    detail-type = ["Step Functions Execution Status Change"],
     detail = {
       "stateMachineArn" : ["${aws_sfn_state_machine.tf_indexads_sfn.arn}"],
-      "state" : ["RUNNING", "SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
+      "status" : ["RUNNING", "SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
     }
   })
 }
