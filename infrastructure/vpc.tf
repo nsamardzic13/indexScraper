@@ -10,10 +10,10 @@ resource "aws_vpc" "tf_vpc" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  count               = 2
-  vpc_id              = aws_vpc.tf_vpc.id
-  cidr_block          = "10.0.${count.index + 1}.0/24"
-  availability_zone   = element(var.availability_zones, count.index)
+  count                   = 2
+  vpc_id                  = aws_vpc.tf_vpc.id
+  cidr_block              = "10.0.${count.index + 1}.0/24"
+  availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = true
 }
 
@@ -34,7 +34,7 @@ resource "aws_security_group" "tf_ecs_security_group" {
   name        = "tf-ecs-security-group"
   description = "Security group for ECS instances"
   vpc_id      = aws_vpc.tf_vpc.id
-  
+
   egress {
     from_port   = 0
     to_port     = 0

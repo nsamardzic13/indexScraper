@@ -1,12 +1,12 @@
 resource "aws_cloudwatch_event_rule" "tf_cw_event_rule_sfn" {
-  name = "${var.project_name}-cw-event-rule-sfn"
+  name        = "${var.project_name}-cw-event-rule-sfn"
   description = "Trigger on Step function changes"
   event_pattern = jsonencode({
-    source = ["aws.states"],
+    source      = ["aws.states"],
     detail-type = ["Step Functions Execution State Change"],
     detail = {
-        "stateMachineArn": ["${aws_sfn_state_machine.tf_indexads_sfn.arn}"],
-        "state": ["RUNNING", "SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
+      "stateMachineArn" : ["${aws_sfn_state_machine.tf_indexads_sfn.arn}"],
+      "state" : ["RUNNING", "SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
     }
   })
 }
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     actions = ["SNS:Publish"]
 
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = [
         "events.amazonaws.com"
       ]
