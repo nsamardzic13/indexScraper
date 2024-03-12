@@ -7,6 +7,10 @@ resource "aws_glue_crawler" "tf_indexads_crawler" {
   name          = "${var.project_name}-crawler"
   role          = aws_iam_role.tf_indexads_role.arn
 
+  schema_change_policy {
+    delete_behavior = "DELETE_FROM_DATABASE"
+  }
+  
   configuration = jsonencode(
     {
       CrawlerOutput = {
