@@ -6,7 +6,7 @@ resource "aws_cloudwatch_event_rule" "tf_cw_event_rule_sfn" {
     detail-type = ["Step Functions Execution Status Change"],
     detail = {
       "stateMachineArn" : ["${aws_sfn_state_machine.tf_indexads_sfn.arn}"],
-      "status" : ["RUNNING", "SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
+      "status" : ["SUCCEEDED", "ABORTED", "FAILED", "TIMED_OUT"]
     }
   })
 }
