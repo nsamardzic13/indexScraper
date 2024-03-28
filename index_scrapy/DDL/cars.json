@@ -1,0 +1,29 @@
+{
+    "rename": {
+        
+    },
+    "setTypes": {
+        "url": "string",
+        "zupanija": "string",
+        "cijena": "float",
+        "id": "int",
+        "objavljeno": "string",
+        "broj_prikaza": "int",
+        "opis": "string",
+        "tip": "string",
+        "motor": "string",
+        "stanje_vozila": "string",
+        "prijedeni_kilometri": "string",
+        "godina_proizvodnje": "int",
+        "snaga_motora_kw": "float",
+        "godina_modela": "int",
+        "registriran_do": "string",
+        "boja_vozila": "string",
+        "broj_stupnjeva_na_mjenjacu": "int",
+        "broj_vrata": "int",
+        "oblik_karoserije": "string",
+        "vlasnik": "string",
+        "marka": "string",
+        "model": "string"
+    }
+}

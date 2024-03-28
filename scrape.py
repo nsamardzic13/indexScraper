@@ -7,6 +7,7 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from scrapy.crawler import CrawlerProcess
+from unidecode import unidecode
 
 from index_scrapy.index_scrapy.spiders.index_spider import *
 
@@ -14,13 +15,42 @@ from index_scrapy.index_scrapy.spiders.index_spider import *
 with open('config.json', 'r', encoding='utf-8') as f:
     config = json.load(f) 
 
-# json to parquet
-def json_to_parquet(data_filename: str) -> str:
-    df = pd.read_json(data_filename)
+def clean_data(name: str, df: pd.DataFrame) -> pd.DataFrame:
+    with open(f'index_scrapy/DDL/{name}.json', 'r') as f:
+        config = json.load(f)
+        rename = config['rename']
+        types = config['setTypes']
+    
+    df.rename(columns=lambda x: unidecode(x.lower()).replace(' ', '_'), inplace=True)
+    df.rename(columns=rename, inplace=True)
 
+    columns_to_keep = [key for key in types.keys() if key in df.columns]
+    df = df[columns_to_keep]
+    
+    for col, dtype in types.items():
+        if col in df.columns:
+            if dtype == "float":
+                df[col] = pd.to_numeric(df[col], errors='coerce')  # Convert to numeric, preserving NaN
+            elif dtype == "int":
+                df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')  # Convert to nullable integer, preserving NaN
+            else:
+                df[col] = df[col].astype(dtype)
+    
+    # Drop duplicate columns keeping only the first occurrence
+    df = df.loc[:, ~df.columns.duplicated()]
+    return df
+
+# json to parquet
+def json_to_parquet(data_filename: str, name: str) -> str:
+    df = pd.read_json(data_filename)
+    
     # Convert DataFrame to Arrow Table
     table = pa.Table.from_pandas(df)
-
+    # clean data
+    df = clean_data(
+        name=name,
+        df=df
+    )
     # Write Arrow Table to Parquet file
     parquet_filename = data_filename.replace('.json', '.parquet')
     pq.write_table(table, parquet_filename)
@@ -36,7 +66,10 @@ def crawl_spider(spider_cls, mode, name, data_filename):
     process.crawl(spider_cls, mode=mode)
     process.start()
 
-    parquet_filename = json_to_parquet(data_filename)
+    parquet_filename = json_to_parquet(
+        data_filename=data_filename, 
+        name=name
+    )
     # Extract year, month, and day from the current date
     today = datetime.today()
     year = today.strftime('%Y')
@@ -79,6 +112,7 @@ def main():
     
     # prepare and start scraping
     spider_cls = available_spiders[NAME]
+    
     print(f'<LOG> {TODAY} Starting crawling for {NAME} - mode: {MODE}')
     data_filename = f'{DATA_DIR}/{NAME}_{TODAY}_{MODE}.json'
     crawl_spider(spider_cls, MODE, NAME, data_filename)

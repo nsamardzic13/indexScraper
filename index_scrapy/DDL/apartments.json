@@ -1,0 +1,22 @@
+{
+    "rename": {
+        "grad/opcina": "grad",
+        "stambena_povrsina_u_m2": "povrsina"
+    },
+    "setTypes": {
+        "url": "string",
+        "zupanija": "string",
+        "cijena": "float",
+        "id": "int",
+        "objavljeno": "string",
+        "broj_prikaza": "int",
+        "opis": "string",
+        "grad": "string",
+        "naselje": "string",
+        "broj_soba": "string",
+        "godina_izgradnje": "int",
+        "godina_zadnje_adaptacije": "int",
+        "povrsina": "string",
+        "grijanje": "string"
+    }
+}

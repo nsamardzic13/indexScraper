@@ -1,0 +1,25 @@
+{
+    "rename": {
+        "grad": "old_grad",
+        "grad/opcina": "grad",
+        "stambena_povrsina_u_m2": "povrsina",
+        "povrsina_okucnice_u_m2": "povrsina_okucnice"
+    },
+    "setTypes": {
+        "url": "string",
+        "zupanija": "string",
+        "cijena": "float",
+        "id": "int",
+        "objavljeno": "string",
+        "broj_prikaza": "int",
+        "opis": "string",
+        "grad": "string",
+        "naselje": "string",
+        "broj_soba": "string",
+        "godina_izgradnje": "int",
+        "godina_zadnje_adaptacije": "int",
+        "povrsina": "string",
+        "povrsina_okucnice_u_m2": "string",
+        "grijanje": "string"
+    }
+}
