@@ -7,7 +7,6 @@ workflows:
     jobs:
       - docker/publish:
           image: nidjo13/indexads
-          tag: ndijo13/indexads:latest
           filters:
             branches:
               only: main
