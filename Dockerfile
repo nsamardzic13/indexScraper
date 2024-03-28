@@ -20,7 +20,6 @@ ENV VIRTUAL_ENV=.venv
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY index_scrapy ./index_scrapy
-COPY queries ./queries
 
 COPY scrape.py ./
 COPY config.json ./
