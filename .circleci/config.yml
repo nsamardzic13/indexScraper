@@ -6,8 +6,8 @@ workflows:
   deploy_infrastructure:
     jobs:
       - docker/publish:
-          image: ${DOCKER_LOGIN}/indexads
-          tag: ${DOCKER_LOGIN}/indexads:latest
+          image: nidjo13/indexads
+          tag: ndijo13/indexads:latest
           filters:
             branches:
               only: main
