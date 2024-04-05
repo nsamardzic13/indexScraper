@@ -14,7 +14,9 @@ resource "aws_glue_crawler" "tf_indexads_crawler" {
   configuration = jsonencode(
     {
       CrawlerOutput = {
-        Partitions = { AddOrUpdateBehavior = "InheritFromTable" }
+        Partitions = {
+          AddOrUpdateBehavior = "InheritFromTable"
+        }
       }
       Version = 1
     }
