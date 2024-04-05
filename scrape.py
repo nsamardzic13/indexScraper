@@ -17,9 +17,9 @@ with open('config.json', 'r', encoding='utf-8') as f:
 
 def clean_data(name: str, df: pd.DataFrame) -> pd.DataFrame:
     with open(f'index_scrapy/DDL/{name}.json', 'r') as f:
-        config = json.load(f)
-        rename = config['rename']
-        types = config['setTypes']
+        ddl = json.load(f)
+        rename = ddl['rename']
+        types = ddl['setTypes']
     
     df.rename(columns=lambda x: unidecode(x.lower()).replace(' ', '_'), inplace=True)
     df.rename(columns=rename, inplace=True)
