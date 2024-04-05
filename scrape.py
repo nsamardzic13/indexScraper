@@ -30,7 +30,7 @@ def clean_data(name: str, df: pd.DataFrame) -> pd.DataFrame:
     for col, dtype in types.items():
         if col in df.columns:
             if dtype == "float":
-                df[col] = pd.to_numeric(df[col], errors='coerce')  # Convert to numeric, preserving NaN
+                df[col] = pd.to_numeric(df[col], errors='coerce').astype('float')  # Convert to numeric, preserving NaN
             elif dtype == "int":
                 df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')  # Convert to nullable integer, preserving NaN
             else:

@@ -13,3 +13,6 @@ azure_config.json
 
 # terraform 
 *terraform*
+
+# helper scripts
+fix_s3.ipynb
