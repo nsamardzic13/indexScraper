@@ -23,6 +23,12 @@ resource "aws_glue_crawler" "tf_indexads_crawler" {
   )
 
   s3_target {
-    path = "s3://${aws_s3_bucket.tf_indexads_bucket.bucket}"
+    path = "s3://${aws_s3_bucket.tf_indexads_bucket.bucket}/apartments"
+  }
+  s3_target {
+    path = "s3://${aws_s3_bucket.tf_indexads_bucket.bucket}/cars"
+  }
+  s3_target {
+    path = "s3://${aws_s3_bucket.tf_indexads_bucket.bucket}/houses"
   }
 }

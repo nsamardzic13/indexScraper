@@ -71,12 +71,9 @@ def crawl_spider(spider_cls, mode, name, data_filename):
         name=name
     )
     # Extract year, month, and day from the current date
-    today = datetime.today()
-    year = today.strftime('%Y')
-    month = today.strftime('%m')
-    day = today.strftime('%d')
+    today = datetime.today().strftime('%Y-%m-%d')
 
-    object_name = f'{name}/year={year}/month={month}/day={day}/mode={mode}/{os.path.basename(parquet_filename)}'
+    object_name = f'{name}/partitionDate={today}/{os.path.basename(parquet_filename)}'
     # upload file
     s3_client = boto3.client('s3')
     try:
