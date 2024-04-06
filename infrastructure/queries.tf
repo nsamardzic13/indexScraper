@@ -1,5 +1,5 @@
 variable "query_cars" {
-  type = string
+  type    = string
   default = <<EOT
   WITH current_prices AS (
     SELECT
@@ -40,7 +40,7 @@ EOT
 }
 
 variable "query_apartments" {
-  type = string
+  type    = string
   default = <<EOT
   WITH current_prices AS (
     SELECT
@@ -81,7 +81,7 @@ EOT
 }
 
 variable "query_houses" {
-  type = string
+  type    = string
   default = <<EOT
   WITH current_prices AS (
     SELECT
