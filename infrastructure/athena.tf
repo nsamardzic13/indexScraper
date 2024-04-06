@@ -13,4 +13,6 @@ resource "aws_athena_workgroup" "athena_workgroup" {
       output_location = "s3://${aws_s3_bucket.tf_indexads_athena_bucket.bucket}/output/"
     }
   }
+
+  force_destroy = true
 }
