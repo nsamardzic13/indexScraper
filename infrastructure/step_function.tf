@@ -173,7 +173,7 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
-                "QueryString": "${var.query_cars}",
+                "QueryString": "${aws_athena_named_query.query_cars.query}",
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsCars"
@@ -206,7 +206,7 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
-                "QueryString": "${var.query_apartments}",
+                "QueryString": "${aws_athena_named_query.query_apartments.query}",
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsApartments"
@@ -239,7 +239,7 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
-                "QueryString": "${var.query_houses}",
+                "QueryString": "${aws_athena_named_query.query_houses.query}",
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsHouses"
