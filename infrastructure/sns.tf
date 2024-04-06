@@ -48,3 +48,20 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     resources = [aws_sns_topic.tf_indexads_sns_sfn.arn]
   }
 }
+
+
+# athena query results
+resource "aws_sns_topic" "tf_indexads_athena_sns" {
+  name = "${var.project_name}-sns-queryresults"
+}
+
+resource "aws_sns_topic_subscription" "tf_indexads_athena_sns_subscribe" {
+  topic_arn = aws_sns_topic.tf_indexads_athena_sns.arn
+  protocol  = "email"
+  endpoint  = var.sns_email_address
+}
+
+resource "aws_sns_topic_policy" "indexads_athena_sns_topic_policy" {
+  arn    = aws_sns_topic.tf_indexads_athena_sns.arn
+  policy = data.aws_iam_policy_document.sns_topic_policy.json
+}

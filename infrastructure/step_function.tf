@@ -160,7 +160,112 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
     },
     "EndIfDone": {
       "Type": "Pass",
-      "End": true
+      "Next": "Parallel"
+    },
+    "Parallel": {
+      "Type": "Parallel",
+      "End": true,
+      "Branches": [
+        {
+          "StartAt": "Athena StartQueryExecutionCars",
+          "States": {
+            "Athena StartQueryExecutionCars": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
+              "Parameters": {
+                "QueryString": "${var.query_cars}",
+                "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
+              },
+              "Next": "Athena GetQueryResultsCars"
+            },
+            "Athena GetQueryResultsCars": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Parameters": {
+                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+              },
+              "Next": "SendQueryResultsCars"
+            },
+            "SendQueryResultsCars": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::sns:publish",
+              "Parameters": {
+                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
+                "Message": {
+                  "Input.$": "$.ResultSet.Rows"
+                }
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "Athena StartQueryExecutionApartments",
+          "States": {
+            "Athena StartQueryExecutionApartments": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
+              "Parameters": {
+                "QueryString": "${var.query_apartments}",
+                "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
+              },
+              "Next": "Athena GetQueryResultsApartments"
+            },
+            "Athena GetQueryResultsApartments": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Parameters": {
+                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+              },
+              "Next": "SendQueryResultsApartments"
+            },
+            "SendQueryResultsApartments": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::sns:publish",
+              "Parameters": {
+                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
+                "Message": {
+                  "Input.$": "$.ResultSet.Rows"
+                }
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "Athena StartQueryExecutionHouses",
+          "States": {
+            "Athena StartQueryExecutionHouses": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
+              "Parameters": {
+                "QueryString": "${var.query_houses}",
+                "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
+              },
+              "Next": "Athena GetQueryResultsHouses"
+            },
+            "Athena GetQueryResultsHouses": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Parameters": {
+                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+              },
+              "Next": "SendQueryResultsHouses"
+            },
+            "SendQueryResultsHouses": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::sns:publish",
+              "Parameters": {
+                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
+                "Message": {
+                  "Input.$": "$.ResultSet.Rows"
+                }
+              },
+              "End": true
+            }
+          }
+        }
+      ]
     }
   }
 }

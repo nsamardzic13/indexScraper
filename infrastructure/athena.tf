@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "tf_indexads_athena_bucket" {
   bucket = "${var.project_name}-athena-bucket"
 }
 
-resource "aws_athena_workgroup" "example" {
+resource "aws_athena_workgroup" "athena_workgroup" {
   name = "${var.project_name}-athena-workgroup"
 
   configuration {
