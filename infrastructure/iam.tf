@@ -79,3 +79,8 @@ resource "aws_iam_role_policy_attachment" "AmazonEventBridgeSchedulerFullAccess"
   role       = aws_iam_role.tf_indexads_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
+  role       = aws_iam_role.tf_indexads_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
