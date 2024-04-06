@@ -16,4 +16,5 @@ resource "aws_athena_workgroup" "athena_workgroup" {
   }
 
   force_destroy = true
+  depends_on    = [aws_s3_bucket.tf_indexads_athena_bucket]
 }

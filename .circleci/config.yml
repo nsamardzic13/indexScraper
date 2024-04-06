@@ -14,8 +14,6 @@ workflows:
           path: ./infrastructure
           checkout: true
           context: terraform
-          requires:
-            - docker/publish
       - terraform/validate:
           path: ./infrastructure
           checkout: true
