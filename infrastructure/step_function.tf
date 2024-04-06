@@ -160,9 +160,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
     },
     "EndIfDone": {
       "Type": "Pass",
-      "Next": "Parallel"
+      "Next": "ParallelAthenaQueries"
     },
-    "Parallel": {
+    "ParallelAthenaQueries": {
       "Type": "Parallel",
       "End": true,
       "Branches": [
@@ -174,6 +174,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
                 "QueryString": "${aws_athena_named_query.query_cars.query}",
+                "QueryExecutionContext": { 
+                  "Database": "${aws_glue_catalog_database.tf_indexads_database.name}"
+                },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsCars"
@@ -207,6 +210,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
                 "QueryString": "${aws_athena_named_query.query_apartments.query}",
+                "QueryExecutionContext": { 
+                  "Database": "${aws_glue_catalog_database.tf_indexads_database.name}"
+                },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsApartments"
@@ -240,6 +246,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
                 "QueryString": "${aws_athena_named_query.query_houses.query}",
+                "QueryExecutionContext": { 
+                  "Database": "${aws_glue_catalog_database.tf_indexads_database.name}"
+                },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
               "Next": "Athena GetQueryResultsHouses"
