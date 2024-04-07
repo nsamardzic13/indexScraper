@@ -186,10 +186,11 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
               "OutputPath": "$.Payload",
               "Parameters": {
-                "Payload.$": "$",
-                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
-                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
-                "Category": "Cars"
+                "Payload": {
+                  "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                  "scrapeCategory": "Cars"
+                },
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST"
               },
               "Retry": [
                 {
@@ -228,10 +229,11 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
               "OutputPath": "$.Payload",
               "Parameters": {
-                "Payload.$": "$",
-                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
-                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
-                "Category": "Apartments"
+                "Payload": {
+                  "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                  "scrapeCategory": "Apartments"
+                },
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST"
               },
               "Retry": [
                 {
@@ -270,10 +272,11 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
               "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
               "OutputPath": "$.Payload",
               "Parameters": {
-                "Payload.$": "$",
-                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
-                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
-                "Category": "Houses"
+                "Payload": {
+                  "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                  "scrapeCategory": "Houses"
+                },
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST"
               },
               "Retry": [
                 {

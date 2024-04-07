@@ -48,52 +48,29 @@ resource "aws_iam_role" "tf_indexads_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "CloudWatchLogsFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-}
+resource "aws_iam_role_policy" "combined_policy" {
+  name   = "CombinedIAMPolicy"
+  role   = aws_iam_role.tf_indexads_role.name
 
-resource "aws_iam_role_policy_attachment" "AmazonS3FullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "SnsFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AWSStepFunctionsConsoleFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSStepFunctionsConsoleFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AWSStepFunctionsFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonECS_FullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AWSGlueServiceRole" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonEventBridgeSchedulerFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEventBridgeSchedulerFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "AWSLambda_FullAccess" {
-  role       = aws_iam_role.tf_indexads_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "logs:*",
+          "s3:*",
+          "sns:*",
+          "states:*",
+          "ecs:*",
+          "glue:*",
+          "events:*",
+          "athena:*",
+          "lambda:*",
+          "secretsmanager:*"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
 }
