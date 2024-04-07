@@ -167,9 +167,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
       "End": true,
       "Branches": [
         {
-          "StartAt": "Athena StartQueryExecutionCars",
+          "StartAt": "AthenaStartQueryExecutionCars",
           "States": {
-            "Athena StartQueryExecutionCars": {
+            "AthenaStartQueryExecutionCars": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
@@ -179,9 +179,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "Athena GetQueryResultsCars"
+              "Next": "AthenaGetQueryResultsCars"
             },
-            "Athena GetQueryResultsCars": {
+            "AthenaGetQueryResultsCars": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:getQueryResults",
               "Parameters": {
@@ -203,9 +203,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
           }
         },
         {
-          "StartAt": "Athena StartQueryExecutionApartments",
+          "StartAt": "AthenaStartQueryExecutionApartments",
           "States": {
-            "Athena StartQueryExecutionApartments": {
+            "AthenaStartQueryExecutionApartments": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
@@ -215,9 +215,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "Athena GetQueryResultsApartments"
+              "Next": "AthenaGetQueryResultsApartments"
             },
-            "Athena GetQueryResultsApartments": {
+            "AthenaGetQueryResultsApartments": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:getQueryResults",
               "Parameters": {
@@ -239,9 +239,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
           }
         },
         {
-          "StartAt": "Athena StartQueryExecutionHouses",
+          "StartAt": "AthenaStartQueryExecutionHouses",
           "States": {
-            "Athena StartQueryExecutionHouses": {
+            "AthenaStartQueryExecutionHouses": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:startQueryExecution.sync",
               "Parameters": {
@@ -251,9 +251,9 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "Athena GetQueryResultsHouses"
+              "Next": "AthenaGetQueryResultsHouses"
             },
-            "Athena GetQueryResultsHouses": {
+            "AthenaGetQueryResultsHouses": {
               "Type": "Task",
               "Resource": "arn:aws:states:::athena:getQueryResults",
               "Parameters": {

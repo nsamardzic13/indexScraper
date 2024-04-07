@@ -1,0 +1,5 @@
+{
+    "googleServiceSecret": "google_service_account",
+    "smtpServerSecret": "gmail_smtp_server",
+    "regionName": "eu-central-1"
+}

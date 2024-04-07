@@ -35,7 +35,15 @@ resource "aws_iam_role" "tf_indexads_role" {
           "Service" = "scheduler.amazonaws.com"
         },
         "Action" = "sts:AssumeRole"
-      }
+      },
+      # lambda
+      {
+        "Effect" = "Allow",
+        "Principal" = {
+          "Service" = "lambda.amazonaws.com"
+        },
+        "Action" = "sts:AssumeRole"
+      },
     ]
   })
 }
@@ -83,4 +91,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEventBridgeSchedulerFullAccess"
 resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
   role       = aws_iam_role.tf_indexads_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSLambda_FullAccess" {
+  role       = aws_iam_role.tf_indexads_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
 }
