@@ -46,7 +46,7 @@ class AWS:
 
 class Email(AWS):
 
-    def __init__(self, email_to: str) -> None:
+    def __init__(self, email_to: str, category: str) -> None:
         self.email_to = email_to
         gmail_credentials = self._get_secret(
             secret_name=config['smtpServerSecret'],
@@ -60,7 +60,7 @@ class Email(AWS):
         )
 
         tdy = datetime.now().strftime('%Y-%m-%d')
-        self._subject = f'Weekly price change for {tdy}'
+        self._subject = f'Weekly price change for {category}: {tdy}'
 
     def send_email(self, html: str, tables: dict) -> None:
         try:

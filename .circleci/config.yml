@@ -14,6 +14,9 @@ workflows:
           path: ./infrastructure
           checkout: true
           context: terraform
+          filters:
+            branches:
+              only: main
       - terraform/validate:
           path: ./infrastructure
           checkout: true

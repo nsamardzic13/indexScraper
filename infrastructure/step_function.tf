@@ -179,25 +179,31 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "AthenaGetQueryResultsCars"
+              "Next": "LambdaInvokeCars"
             },
-            "AthenaGetQueryResultsCars": {
+            "LambdaInvokeCars": {
               "Type": "Task",
-              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+              "OutputPath": "$.Payload",
               "Parameters": {
-                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+                "Payload.$": "$",
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
+                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                "Category": "Cars"
               },
-              "Next": "SendQueryResultsCars"
-            },
-            "SendQueryResultsCars": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::sns:publish",
-              "Parameters": {
-                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
-                "Message": {
-                  "Input.$": "$.ResultSet.Rows"
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2
                 }
-              },
+              ],
               "End": true
             }
           }
@@ -215,25 +221,31 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "AthenaGetQueryResultsApartments"
+              "Next": "LambdaInvokeApartments"
             },
-            "AthenaGetQueryResultsApartments": {
+            "LambdaInvokeApartments": {
               "Type": "Task",
-              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+              "OutputPath": "$.Payload",
               "Parameters": {
-                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+                "Payload.$": "$",
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
+                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                "Category": "Apartments"
               },
-              "Next": "SendQueryResultsApartments"
-            },
-            "SendQueryResultsApartments": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::sns:publish",
-              "Parameters": {
-                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
-                "Message": {
-                  "Input.$": "$.ResultSet.Rows"
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2
                 }
-              },
+              ],
               "End": true
             }
           }
@@ -251,25 +263,31 @@ resource "aws_sfn_state_machine" "tf_indexads_sfn" {
                 },
                 "WorkGroup": "${aws_athena_workgroup.athena_workgroup.name}"
               },
-              "Next": "AthenaGetQueryResultsHouses"
+              "Next": "LambdaInvokeHouses"
             },
-            "AthenaGetQueryResultsHouses": {
+            "LambdaInvokeHouses": {
               "Type": "Task",
-              "Resource": "arn:aws:states:::athena:getQueryResults",
+              "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+              "OutputPath": "$.Payload",
               "Parameters": {
-                "QueryExecutionId.$": "$.QueryExecution.QueryExecutionId"
+                "Payload.$": "$",
+                "FunctionName": "${aws_lambda_function.lambda_function.arn}:$LATEST",
+                "S3Path.$": "$.QueryExecution.ResultConfiguration.OutputLocation",
+                "Category": "Houses"
               },
-              "Next": "SendQueryResultsHouses"
-            },
-            "SendQueryResultsHouses": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::sns:publish",
-              "Parameters": {
-                "TopicArn": "${aws_sns_topic.tf_indexads_athena_sns.arn}",
-                "Message": {
-                  "Input.$": "$.ResultSet.Rows"
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2
                 }
-              },
+              ],
               "End": true
             }
           }

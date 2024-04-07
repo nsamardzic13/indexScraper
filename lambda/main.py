@@ -5,9 +5,12 @@ from helper import Email
 
 def lambda_handler(event, context):
     file = event['s3_path']
+    category = event['category']
+    
     target_email = os.environ.get('TARGET_EMAIL')
     email = Email(
-        email_to=target_email
+        email_to=target_email,
+        category=category
     )
 
     df = email.open_s3_file(file)
