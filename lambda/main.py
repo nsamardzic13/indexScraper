@@ -4,7 +4,7 @@ from helper import Email
 
 
 def lambda_handler(event, context):
-    file = event['s3_path']
+    file = event['S3Path']
     category = event['scrapeCategory']
     
     target_email = os.environ['TARGET_EMAIL']

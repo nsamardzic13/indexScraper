@@ -49,15 +49,15 @@ resource "aws_iam_role" "tf_indexads_role" {
 }
 
 resource "aws_iam_role_policy" "combined_policy" {
-  name   = "CombinedIAMPolicy"
-  role   = aws_iam_role.tf_indexads_role.name
+  name = "CombinedIAMPolicy"
+  role = aws_iam_role.tf_indexads_role.name
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "logs:*",
           "s3:*",
           "sns:*",
