@@ -39,7 +39,7 @@ class AWS:
 
         s3 = boto3.client('s3')
         obj = s3.get_object(Bucket=bucket, Key=key)
-        df = pd.read_csv(obj['body'])
+        df = pd.read_csv(obj['Body'])
 
         return df
 
