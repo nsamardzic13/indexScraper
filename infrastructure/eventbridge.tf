@@ -6,8 +6,7 @@ resource "aws_scheduler_schedule" "example" {
     mode = "OFF"
   }
 
-  # every 3 days
-  schedule_expression = "cron(00 07 */3 * * *)"
+  schedule_expression = "cron(00 07 ? * MON,THU *)"
 
   target {
     arn      = aws_sfn_state_machine.tf_indexads_sfn.arn
