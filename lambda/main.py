@@ -15,7 +15,7 @@ def lambda_handler(event, context):
         email_to=target_email,
         category=category
     )
-
+    
     df = email.open_s3_file(file)
     # construct email
     html = """
